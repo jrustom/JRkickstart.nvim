@@ -68,7 +68,7 @@ Kickstart Guide:
 
   I have left several `:help X` comments throughout the init.lua
     These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
+     or Neovim features used in Kickstart.
 
    NOTE: Look for lines like this
 
@@ -86,16 +86,16 @@ P.S. You can delete this when you're done too. It's your config now! :)
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
+--  NOTE: Must happen before  are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
--- NOTE: You can change these options as you wish!
+-- NOTE: You can change these options` as you wish!
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
@@ -166,11 +166,17 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Set relative line numbers
+vim.opt.relativenumber = true
+vim.opt.number = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
@@ -234,22 +240,22 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
+-- [[ Configure and install  ]]
 --
---  To check the current status of your plugins, run
+--  To check the current status of your , run
 --    :Lazy
 --
 --  You can press `?` in this menu for help. Use `:q` to close the window
 --
---  To update plugins you can run
+--  To update  you can run
 --    :Lazy update
 --
--- NOTE: Here is where you install your plugins.
+-- NOTE: Here is where you install your .
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  -- NOTE:  can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
-  -- NOTE: Plugins can also be added by using a table,
+  -- NOTE:  can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
   --
@@ -284,10 +290,10 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
+  -- NOTE:  can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
-  -- lazy loading plugins that don't need to be loaded immediately at startup.
+  -- lazy loading  that don't need to be loaded immediately at startup.
   --
   -- For example, in the following configuration, we use:
   --  event = 'VimEnter'
@@ -351,7 +357,7 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: Plugins can specify dependencies.
+  -- NOTE:  can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
   -- you do for a plugin at the top level, you can do for a dependency.
@@ -423,6 +429,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'harpoon')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -436,6 +443,13 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.keymap.set('n', '<leader>hm', require('harpoon.mark').add_file, { desc = '[H]arpoon [M]ark' })
+      vim.keymap.set('n', '<leader>hu', require('harpoon.mark').rm_file, { desc = '[H]arpoon [U]nmark' })
+      vim.keymap.set('n', '<leader>hq', ':Telescope harpoon marks<CR>', { desc = '[H]arpoon [Q]uick Menu', noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>hn', require('harpoon.ui').nav_next, { desc = '[H]arpoon [N]ext' })
+      vim.keymap.set('n', '<leader>hp', require('harpoon.ui').nav_prev, { desc = '[H]arpoon [P]revious' })
+      vim.keymap.set('n', '<leader>hc', require('harpoon.mark').clear_all, { desc = '[H]arpoon [C]lear All' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -462,9 +476,9 @@ require('lazy').setup({
     end,
   },
 
-  -- LSP Plugins
+  -- LSP
   {
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+    -- `lazydev` configures Lua LSP for your Neovim config, runtime and
     -- used for completion, annotations and signatures of Neovim apis
     'folke/lazydev.nvim',
     ft = 'lua',
@@ -513,7 +527,7 @@ require('lazy').setup({
       --  - and more!
       --
       -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
+      -- Neovim. This is where `mason` and related  come into play.
       --
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
@@ -677,11 +691,11 @@ require('lazy').setup({
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
+        -- Some languages (like typescript) have entire language  that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -698,6 +712,8 @@ require('lazy').setup({
             },
           },
         },
+
+        html = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -876,13 +892,24 @@ require('lazy').setup({
     },
   },
 
+  -- HTML Auto close tags
+  {
+    'windwp/nvim-ts-autotag',
+    event = 'InsertEnter',
+    ft = { 'html', 'javascriptreact', 'typescriptreact' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('nvim-ts-autotag').setup()
+    end,
+  },
+
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 1000, -- Make sure to load this before all the other start .
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
@@ -901,7 +928,7 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
-  { -- Collection of various small independent plugins/modules
+  { -- Collection of various small independent /modules
     'echasnovski/mini.nvim',
     config = function()
       -- Better Around/Inside textobjects
@@ -968,23 +995,23 @@ require('lazy').setup({
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
+  -- NOTE: Next step on your Neovim journey: Add/Configure additional  for Kickstart
   --
-  --  Here are some example plugins that I've included in the Kickstart repository.
+  --  Here are some example  that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  -- require 'kickstart..debug',
+  -- require 'kickstart..indent_line',
+  -- require 'kickstart..lint',
+  -- require 'kickstart..autopairs',
+  -- require 'kickstart..neo-tree',
+  -- require 'kickstart..gitsigns', -- adds gitsigns recommend keymaps
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  -- NOTE: The import below can automatically add your own , configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  --  Uncomment the following line and add your  to `lua/custom/plugins/*.lua` to get going.
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
