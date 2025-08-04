@@ -170,6 +170,11 @@ vim.o.confirm = true
 vim.opt.relativenumber = true
 vim.opt.number = true
 
+-- Set tabs
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -1003,7 +1008,7 @@ require('lazy').setup({
   -- require 'kickstart..debug',
   -- require 'kickstart..indent_line',
   -- require 'kickstart..lint',
-  -- require 'kickstart..autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart..neo-tree',
   -- require 'kickstart..gitsigns', -- adds gitsigns recommend keymaps
 
